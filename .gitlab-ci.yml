@@ -1,0 +1,40 @@
+# Defaults
+# --------
+image: ghcr.io/astral-sh/uv:0.9.8-python3.13-trixie-slim
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_DEPTH: 0
+
+# Stages
+# ------
+stages:
+  - qa
+
+# Job rules
+# ---------
+.on-merge:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /^bump:/
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web")
+
+.on-merge-request:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# QA stage jobs
+# -------------
+pre-commit:
+  needs: []
+  rules:
+    - !reference [.on-merge-request, rules]
+    - !reference [.on-merge, rules]
+  stage: qa
+  before_script:
+  - apt-get update && apt-get install -y git
+  - mkdir .mypy_cache
+  - uv venv
+  - uv sync --group dev
+  script:
+  - uv run pre-commit run --all-files
