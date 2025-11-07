@@ -10,6 +10,7 @@ variables:
 # ------
 stages:
   - qa
+  - bump
 
 # Job rules
 # ---------
@@ -18,6 +19,13 @@ stages:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /^bump:/
       when: never
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web")
+
+.on-merge-manual:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /^bump:/
+      when: never
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web")
+      when: manual
 
 .on-merge-request:
   rules:
@@ -38,3 +46,34 @@ pre-commit:
   - uv sync --group dev
   script:
   - uv run pre-commit run --all-files
+
+# Bump stage jobs
+# ---------------
+bump-version:
+  stage: bump
+  needs: []
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - !reference [.on-merge-manual, rules]
+  before_script:
+    - apt-get update && apt-get install -y git
+    - uv venv
+    - uv sync --group dev
+  script:
+    - git remote add ci-origin https://oauth2:${BUMP_VERSION_GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH} || git remote set-url ci-origin https://oauth2:${BUMP_VERSION_GITLAB_ACCESS_TOKEN}@gitlab.com/${CI_PROJECT_PATH}
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git checkout -b $CI_COMMIT_BRANCH || git checkout $CI_COMMIT_BRANCH
+    - git fetch --tags
+    - uv run cz bump --retry || echo "No changes to bump"
+    - TAG=$(git tag --points-at HEAD)
+    - |
+      if [[ $TAG ]]; then
+        echo "Version bumped";
+      else
+        echo "Version NOT bumped";
+        exit 0;
+      fi
+    - git push ci-origin $CI_COMMIT_REF_NAME
+    - git push ci-origin $TAG
