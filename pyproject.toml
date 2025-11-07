@@ -8,6 +8,7 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "commitizen>=4.9.1",
     "pre-commit>=4.3.0",
 ]
 
@@ -18,3 +19,16 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["E", "F", "I"] # E: check PEP 8 style rules, F: check unused code, I: sort imports
 ignore = ["E501"] # avoid noisy lint warnings
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"
+major_version_zero = true
+version_files = [
+    "pyproject.toml:^version",
+]
+update_changelog_on_bump = true
+changelog_incremental = true
+bump_message = "bump: $current_version → $new_version"
+changelog_file = "CHANGELOG.md"
