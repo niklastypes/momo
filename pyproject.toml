@@ -10,3 +10,15 @@ dependencies = []
 dev = [
     "pre-commit>=4.3.0",
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
+disable_error_code = ["typeddict-item"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"] # E: check PEP 8 style rules, F: check unused code, I: sort imports
+ignore = ["E501"] # avoid noisy lint warnings
