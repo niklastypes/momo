@@ -10,6 +10,7 @@ variables:
 # ------
 stages:
   - qa
+  - release
   - bump
 
 # Job rules
@@ -31,6 +32,10 @@ stages:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+.on-version-tag:
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+.*$/'
+
 # QA stage jobs
 # -------------
 pre-commit:
@@ -46,6 +51,22 @@ pre-commit:
   - uv sync --group dev
   script:
   - uv run pre-commit run --all-files
+
+# Release stage jobs
+# ------------------
+release-to-gitlab:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/cli:latest
+  needs: []
+  rules:
+    - !reference [.on-version-tag, rules]
+  script:
+    - echo 'Create release in GitLab'
+  release:
+    name: "Release $CI_COMMIT_TAG"
+    description: CHANGELOG.md
+    tag_name: "$CI_COMMIT_TAG"
+    ref: "$CI_COMMIT_TAG"
 
 # Bump stage jobs
 # ---------------
