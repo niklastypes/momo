@@ -20,8 +20,12 @@ target-version = "py313"
 select = ["E", "F", "I"] # E: check PEP 8 style rules, F: check unused code, I: sort imports
 ignore = ["E501"] # avoid noisy lint warnings
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [tool.commitizen]
-name = "cz_conventional_commits"
+name = "cz_momo"
 version = "0.1.0"
 tag_format = "v$version"
 major_version_zero = true
@@ -32,3 +36,6 @@ update_changelog_on_bump = true
 changelog_incremental = true
 bump_message = "bump: $current_version → $new_version"
 changelog_file = "CHANGELOG.md"
+
+[project.entry-points."commitizen.plugin"]
+cz_momo = "momo.cz:CustomMomoCz"
