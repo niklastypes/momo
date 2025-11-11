@@ -19,6 +19,7 @@ repos:
     hooks:
     -   id: pre-commit-update
         stages: [pre-push]
+        args: [--exclude, mdformat] # mdformat plugins not all compatible with latest mdformat version
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -44,11 +45,12 @@ repos:
     -   id: ruff-format
 
 -   repo: https://github.com/hukkin/mdformat
-    rev: 1.0.0
+    rev: 0.7.17
     hooks:
     -   id: mdformat
         additional_dependencies:
-        -   mdformat-gfm
-        -   mdformat-black
-        -   mdformat-admon
+          - mdformat-gfm
+          - mdformat-black
+          - mdformat-admon
+          - mdformat-frontmatter
         args: [--number]
