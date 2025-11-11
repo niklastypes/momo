@@ -5,12 +5,33 @@ image: ghcr.io/astral-sh/uv:0.9.8-python3.13-trixie-slim
 variables:
   GIT_STRATEGY: clone
   GIT_DEPTH: 0
+  DEV_DIARY_PATH: docs/dev-diary
+  DEV_BLOG_REPO: niklasbaier.gitlab.io
+  DEV_BLOG_BRANCH: main
+  DEV_BLOG_MOMO_PROJECT_PATH: content/projects/momo
+  DEV_DIARY_FRONTMATTER: |
+    ---
+    title: ${CI_COMMIT_TAG}
+    date: $(date +%F)
+    draft: true
+    description: Release notes for Momo ${CI_COMMIT_TAG} from Niklas' perspective.
+    tags: [momo]
+    authors:
+      - niklas
+    ---
+  DEV_DIARY_RELEASE_BUTTON: |
+    ---
+
+    {{< button href="RELEASE_URL_PLACEHOLDER" >}}
+    {{< icon "gitlab" >}} View release on GitLab
+    {{< /button >}}
 
 # Stages
 # ------
 stages:
   - qa
   - release
+  - publish
   - bump
 
 # Job rules
@@ -67,6 +88,39 @@ release-to-gitlab:
     description: CHANGELOG.md
     tag_name: "$CI_COMMIT_TAG"
     ref: "$CI_COMMIT_TAG"
+
+# Publish stage jobs
+# ------------------
+publish-dev-diary-entry:
+  stage: publish
+  needs:
+    - release-to-gitlab
+  rules:
+    - !reference [.on-version-tag, rules]
+  before_script:
+    - apt-get update && apt-get install -y git
+  script:
+    - git clone https://oauth2:${DEV_BLOG_PERSONAL_ACCESS_TOKEN}@gitlab.com/niklasbaier/${DEV_BLOG_REPO}.git
+    - cd ${DEV_BLOG_REPO}
+
+    # prepare paths
+    - DEV_BLOG_ENTRY_PATH="${DEV_BLOG_MOMO_PROJECT_PATH}/${CI_COMMIT_TAG}.md"
+    - DEV_DIARY_ENTRY_PATH="../${DEV_DIARY_PATH}/${CI_COMMIT_TAG}.md"
+    - RELEASE_URL="https://gitlab.com/niklasbaier/momo/-/releases/${CI_COMMIT_TAG}"
+
+    # frontmatter & content
+    - eval "echo \"${DEV_DIARY_FRONTMATTER}\"" > "${DEV_BLOG_ENTRY_PATH}"
+    - cat "${DEV_DIARY_ENTRY_PATH}" >> "${DEV_BLOG_ENTRY_PATH}"
+    - echo "" >> "${DEV_BLOG_ENTRY_PATH}"
+
+    # reference to gitlab release
+    - printf "%s" "${DEV_DIARY_RELEASE_BUTTON}" | sed "s|RELEASE_URL_PLACEHOLDER|${RELEASE_URL}|g" >> "${DEV_BLOG_ENTRY_PATH}"
+
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git add "${DEV_BLOG_MOMO_PROJECT_PATH}/"
+    - 'git commit -m "docs: publish Momo dev diary entry for ${CI_COMMIT_TAG} release"' # '' to avoid (wronful) IDE syntax highligting
+    - git push origin $DEV_BLOG_BRANCH
 
 # Bump stage jobs
 # ---------------
