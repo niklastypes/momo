@@ -1,9 +1,9 @@
 default_stages: [pre-commit, manual]
 
 default_install_hook_types:
-  - pre-commit
-  - commit-msg
-  - pre-push
+-   pre-commit
+-   commit-msg
+-   pre-push
 
 repos:
 -   repo: https://github.com/compilerla/conventional-pre-commit
@@ -38,7 +38,7 @@ repos:
         language_version: python3.13
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.4
+    rev: v0.14.6
     hooks:
     -   id: ruff
         args: [--fix]
@@ -49,8 +49,8 @@ repos:
     hooks:
     -   id: mdformat
         additional_dependencies:
-          - mdformat-gfm
-          - mdformat-black
-          - mdformat-admon
-          - mdformat-frontmatter
+        -   mdformat-gfm
+        -   mdformat-black
+        -   mdformat-admon
+        -   mdformat-frontmatter
         args: [--number]
