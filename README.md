@@ -46,3 +46,18 @@ To know which tag and additions to the `CHANGELOG.md` will be created from the c
 ```bash
 uv run cz bump --dry-run
 ```
+
+To delete a new tag & release (e.g. after testing), run:
+
+```bash
+git pull
+git tag -d vx.x.x
+git push origin :refs/tags/vx.x.x
+```
+
+To delete the corresponding `bump` commit, run:
+
+```bash
+git reset --hard HEAD~1
+git push --force
+```
