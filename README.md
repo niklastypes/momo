@@ -38,3 +38,11 @@ Run the pre-commit hooks via:
 ```bash
 uv run pre-commit run --all-files
 ```
+
+## Usage
+
+To know which tag and additions to the `CHANGELOG.md` will be created from the current stack of commits (e.g. when formulating the next release notes), simply run:
+
+```bash
+uv run cz bump --dry-run
+```
