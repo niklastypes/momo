@@ -5,10 +5,12 @@ import pydantic_ai
 from pydantic_ai.models import openai
 from pydantic_ai.providers import ollama
 
+from momo import enums
+
 dotenv.load_dotenv()
 
 ollama_model = openai.OpenAIChatModel(
-    model_name="ministral-3:3b",
+    model_name=enums.OllamaModel.mistral_ministral_3b,
     provider=ollama.OllamaProvider(base_url=os.getenv("OLLAMA_BASE_URL")),
 )
 
