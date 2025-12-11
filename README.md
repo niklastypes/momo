@@ -2,10 +2,25 @@
 
 ## Setup
 
-Make sure to have `uv` installed:
+Make sure to have `uv` & `ollama` installed:
 
 ```bash
 brew install uv
+brew install ollama
+```
+
+During the very first setup, run
+
+```bash
+brew services start ollama
+```
+
+to run the `ollama` server in the background.
+
+Use the `ollama` cli tool to download `ministral-3:3b` as LLM of choice:
+
+```bash
+ollama pull ministral-3:3b
 ```
 
 Install the Python version pinned in `.python-version` via:
@@ -40,6 +55,12 @@ uv run pre-commit run --all-files
 ```
 
 ## Usage
+
+Invoke Momo via:
+
+```bash
+uv run python src/momo/agent.py
+```
 
 To know which tag and additions to the `CHANGELOG.md` will be created from the current stack of commits (e.g. when formulating the next release notes), simply run:
 
