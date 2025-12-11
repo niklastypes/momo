@@ -20,5 +20,7 @@ momo_agent = pydantic_ai.Agent(
     model=ollama_model, instructions=MOMO_CONFIG.prompt
 )
 
-result = momo_agent.run_sync("Hi! What is your name?")
-print(result.output)
+while True:
+    user_input = input("User: ")
+    result = momo_agent.run_sync(user_input)
+    print(f"Momo: {result.output}\n")
