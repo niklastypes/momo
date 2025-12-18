@@ -1,8 +1,9 @@
-import pydantic
 import pydantic_settings
 import structlog
 
 from momo import enums
+
+log = structlog.get_logger()
 
 
 class MomoConfig(pydantic_settings.BaseSettings):
@@ -11,16 +12,12 @@ class MomoConfig(pydantic_settings.BaseSettings):
     prompt: str
 
 
-log = structlog.get_logger()
-
-try:
-    MOMO_CONFIG = MomoConfig(
+def load_momo_config() -> MomoConfig:
+    momo_config = MomoConfig(
         model_name=enums.OllamaModel.mistral_ministral_3b,
         temperature=0.05,
         prompt="Your name is Momo. You are a helpful assistant.",
     )
 
-    log.info("Successfully initialized Momo with config:\n", config=MOMO_CONFIG)
-
-except pydantic.ValidationError:
-    log.error("Momo config validation failed. Please try again with valid field values.")
+    log.info("Successfully initialized Momo config:\n", config=momo_config)
+    return momo_config

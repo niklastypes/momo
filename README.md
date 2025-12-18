@@ -56,11 +56,20 @@ uv run pre-commit run --all-files
 
 ## Usage
 
-Invoke Momo via:
+### CLI
+
+Interact with Momo via the command line using:
 
 ```bash
-uv run python src/momo/agent.py
+uv run momo <command>
 ```
+
+So far, two commands have been defined (use `uv run momo --help` to view all available commands):
+
+- `chat`: start a simple stateless back-and-forth chat with Momo
+- `status`: placeholder command to print the current Momo status to the console
+
+### Git tags
 
 To know which tag and additions to the `CHANGELOG.md` will be created from the current stack of commits (e.g. when formulating the next release notes), simply run:
 

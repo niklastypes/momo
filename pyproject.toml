@@ -44,3 +44,6 @@ changelog_file = "CHANGELOG.md"
 
 [project.entry-points."commitizen.plugin"]
 cz_momo = "momo.cz:CustomMomoCz"
+
+[project.scripts]
+momo = "momo.cli:app"

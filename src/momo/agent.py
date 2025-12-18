@@ -6,21 +6,16 @@ from pydantic_ai import settings
 from pydantic_ai.models import openai
 from pydantic_ai.providers import ollama
 
-from momo.config import MOMO_CONFIG
+from momo import config
 
 dotenv.load_dotenv()
 
-ollama_model = openai.OpenAIChatModel(
-    model_name=MOMO_CONFIG.model_name,
-    provider=ollama.OllamaProvider(base_url=os.getenv("OLLAMA_BASE_URL")),
-    settings=settings.ModelSettings(temperature=MOMO_CONFIG.temperature),
-)
 
-momo_agent = pydantic_ai.Agent(
-    model=ollama_model, instructions=MOMO_CONFIG.prompt
-)
+def build_momo_agent_from_config(config: config.MomoConfig) -> pydantic_ai.Agent:
+    ollama_model = openai.OpenAIChatModel(
+        model_name=config.model_name,
+        provider=ollama.OllamaProvider(base_url=os.getenv("OLLAMA_BASE_URL")),
+        settings=settings.ModelSettings(temperature=config.temperature),
+    )
 
-while True:
-    user_input = input("User: ")
-    result = momo_agent.run_sync(user_input)
-    print(f"Momo: {result.output}\n")
+    return pydantic_ai.Agent(model=ollama_model, instructions=config.prompt)
