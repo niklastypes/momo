@@ -8,7 +8,7 @@ variables:
   DEV_DIARY_PATH: docs/dev-diary
   DEV_BLOG_REPO: niklasbaier.gitlab.io
   DEV_BLOG_BRANCH: main
-  DEV_BLOG_MOMO_PROJECT_PATH: content/projects/momo
+  DEV_BLOG_MOMO_PROJECT_PATH: content/projects/momo/posts
   DEV_DIARY_FRONTMATTER: |
     ---
     title: ${CI_COMMIT_TAG}
