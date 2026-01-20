@@ -1,6 +1,6 @@
 [project]
 name = "momo"
-version = "0.2.0"
+version = "0.3.0"
 description = "Momo (もも) - a personalized agentic digital being with a simulated life"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -31,7 +31,7 @@ build-backend = "hatchling.build"
 
 [tool.commitizen]
 name = "cz_momo"
-version = "0.2.0"
+version = "0.3.0"
 tag_format = "v$version"
 major_version_zero = true
 version_files = [

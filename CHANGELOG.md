@@ -1,3 +1,31 @@
+## v0.3.0 (2026-01-20)
+
+### ✨ Features
+
+- introduce lean momo-cli tool with typer
+- introduce logging via structlog
+- enable first simple stateless chat via cli
+- introduce MomoConfig
+- add very first pydanticAI momo agent iteration
+
+### 🐛 Fixes
+
+- update dev blog path
+
+### ♻️ Refactors
+
+- extract ollama model as StrEnum
+- extract ollama base URL into .env
+
+### 📚 Documentation Changes
+
+- add dev diary entry for v0.3.0
+
+### 🔧 Chores
+
+- update ruff-pre-commit-hook
+- update .pre-commit-config.yaml
+
 ## v0.2.0 (2025-12-11)
 
 ### ✨ Features
