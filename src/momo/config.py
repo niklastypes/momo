@@ -1,7 +1,7 @@
 import pydantic_settings
 import structlog
 
-from momo import enums
+from momo import enums, prompt
 
 log = structlog.get_logger()
 
@@ -16,7 +16,7 @@ def load_momo_config() -> MomoConfig:
     momo_config = MomoConfig(
         model_name=enums.OllamaModel.mistral_ministral_3b,
         temperature=0.05,
-        prompt="Your name is Momo. You are a helpful assistant.",
+        prompt=prompt.construct_system_prompt(),
     )
 
     log.info("Successfully initialized Momo config:\n", config=momo_config)
