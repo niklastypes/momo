@@ -1,21 +1,25 @@
 import pathlib
+import typing as t
 
 import jinja2
 import yaml
 
-BASE_DIR = pathlib.Path(__file__).parent
-
-with open(BASE_DIR / "prompts/quirks.yaml", "r") as f:
-    yaml_data = yaml.safe_load(f)
-
-env = jinja2.Environment(
+BASE_DIR = pathlib.Path(__file__).parent  # .../momo/src/momo
+JINJA_ENV = jinja2.Environment(
     loader=jinja2.FileSystemLoader(BASE_DIR / "prompts"), undefined=jinja2.StrictUndefined
 )
 
-template = env.get_template("system_prompt.j2")
 
-final_prompt = template.render(
-    agent_name="Momo", creator_name="Niklas", user_name="Niklas", **yaml_data
-)
+def _load_yaml(path: str) -> t.Any:
+    with open(BASE_DIR / path, "r") as file:
+        return yaml.safe_load(file)
 
-print(final_prompt)
+
+def construct_system_prompt() -> str:
+    template = JINJA_ENV.get_template("system_prompt.j2")
+    return template.render(
+        agent_name="Momo",
+        creator_name="Niklas",
+        user_name="Niklas",
+        **_load_yaml("prompts/quirks.yaml"),
+    )
