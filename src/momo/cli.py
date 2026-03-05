@@ -32,8 +32,8 @@ def diary_entry(
     momo_diary_agent = agent.build_momo_agent_from_config(momo_diary_config)
 
     changelog = diary.load_changelog(changelog_path)
-    diary_entry = diary.generate_diary_entry(momo_diary_agent, changelog, comment)
-    print(diary_entry)
+    diary_entry_body = diary.generate_diary_entry_body(momo_diary_agent, changelog, comment)
+    print(diary_entry_body)
 
 
 if __name__ == "__main__":
