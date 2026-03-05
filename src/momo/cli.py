@@ -1,17 +1,23 @@
 import typer
 
-from momo import agent, config, diary, enums
+from momo import agent, config, constants, diary, enums
 
 app = typer.Typer(name="momo-cli")
 
 
 @app.command()
-def chat() -> None:
-    momo_chat_config = config.load_momo_config(user_name="Niklas", mode=enums.MomoMode.CHAT)
+def chat(
+    user_name: str = typer.Option(
+        constants.DEFAULT_USER_NAME,
+        "--user-name",
+        help="Customize the interaction by providing your name",
+    ),
+) -> None:
+    momo_chat_config = config.load_momo_config(user_name=user_name, mode=enums.MomoMode.CHAT)
     momo_chat_agent = agent.build_momo_agent_from_config(momo_chat_config)
 
     while True:
-        user_input = input("User: ")
+        user_input = input(f"{user_name}: ")
         result = momo_chat_agent.run_sync(user_input)
         print(f"Momo: {result.output}\n")
 

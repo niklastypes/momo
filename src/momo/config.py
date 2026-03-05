@@ -27,7 +27,9 @@ def _load_system_prompt_config(user_name: str, mode: enums.MomoMode) -> SystemPr
     return system_prompt_config
 
 
-def load_momo_config(user_name: str, mode: enums.MomoMode) -> MomoConfig:
+def load_momo_config(
+    mode: enums.MomoMode, user_name: str = constants.DEFAULT_USER_NAME
+) -> MomoConfig:
     momo_config = MomoConfig(
         model_name=enums.OllamaModel.mistral_ministral_3b,
         temperature=0.05,
