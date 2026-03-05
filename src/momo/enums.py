@@ -7,4 +7,5 @@ class OllamaModel(enum.StrEnum):
 
 class MomoMode(enum.StrEnum):
     CHAT = "chat"
-    DIARY = "diary"
+    DIARY_BODY = "diary_body"
+    DIARY_TITLE = "diary_title"
