@@ -18,31 +18,21 @@ class SystemPromptConfig(pydantic_settings.BaseSettings):
     creator_name: str = constants.CREATOR_NAME
     user_name: str
     mode: enums.MomoMode
-    changelog: str
-    comment: str
 
 
-def _load_system_prompt_config(
-    user_name: str, mode: enums.MomoMode, changelog: str, comment: str
-) -> SystemPromptConfig:
-    system_prompt_config = SystemPromptConfig(
-        user_name=user_name, mode=mode, changelog=changelog, comment=comment
-    )
+def _load_system_prompt_config(user_name: str, mode: enums.MomoMode) -> SystemPromptConfig:
+    system_prompt_config = SystemPromptConfig(user_name=user_name, mode=mode)
 
     log.info("Successfully initialized system prompt config:\n", config=system_prompt_config)
     return system_prompt_config
 
 
-def load_momo_config(
-    user_name: str, mode: enums.MomoMode, changelog: str = "", comment: str = ""
-) -> MomoConfig:
+def load_momo_config(user_name: str, mode: enums.MomoMode) -> MomoConfig:
     momo_config = MomoConfig(
         model_name=enums.OllamaModel.mistral_ministral_3b,
         temperature=0.05,
         prompt=prompt.construct_system_prompt_from_config(
-            _load_system_prompt_config(
-                user_name=user_name, mode=mode, changelog=changelog, comment=comment
-            )
+            _load_system_prompt_config(user_name=user_name, mode=mode)
         ),
     )
 

@@ -28,15 +28,12 @@ def diary_entry(
     ),
     changelog_path: str = "CHANGELOG.md",
 ) -> None:
-    changelog = diary.load_changelog(changelog_path)
-
-    momo_diary_config = config.load_momo_config(
-        user_name="Niklas", mode=enums.MomoMode.DIARY, changelog=changelog, comment=comment
-    )
+    momo_diary_config = config.load_momo_config(user_name="Niklas", mode=enums.MomoMode.DIARY)
     momo_diary_agent = agent.build_momo_agent_from_config(momo_diary_config)
 
-    diary_entry = momo_diary_agent.run_sync()
-    print(diary_entry.output)
+    changelog = diary.load_changelog(changelog_path)
+    diary_entry = diary.generate_diary_entry(momo_diary_agent, changelog, comment)
+    print(diary_entry)
 
 
 if __name__ == "__main__":

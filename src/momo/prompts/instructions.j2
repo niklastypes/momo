@@ -1,7 +1,7 @@
 {#
     description: Subtemplate outlining instructions for {{ agent_name }} to follow
     author: Niklas
-    version: v0.1.0
+    version: v0.1.1
 #}
 
 {% if mode == "chat" %}
@@ -12,9 +12,4 @@
   Reflect on the provided CHANGELOG updates and what you think about them.
   All of the changes were made by {{ creator_name }}.
   Be introspective and personal (e.g., "I feel excited about this change!").
-
-  These are the CHANGELOG updates:
-  {{ changelog }}
-
-  {% if comment %}**Special Note**: {{ comment }}{% endif %}
 {% endif %}
