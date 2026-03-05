@@ -23,7 +23,7 @@ class SystemPromptConfig(pydantic_settings.BaseSettings):
 def _load_system_prompt_config(user_name: str, mode: enums.MomoMode) -> SystemPromptConfig:
     system_prompt_config = SystemPromptConfig(user_name=user_name, mode=mode)
 
-    log.info("Successfully initialized system prompt config:\n", config=system_prompt_config)
+    log.debug("Successfully initialized system prompt config:\n", config=system_prompt_config)
     return system_prompt_config
 
 
@@ -36,5 +36,5 @@ def load_momo_config(user_name: str, mode: enums.MomoMode) -> MomoConfig:
         ),
     )
 
-    log.info("Successfully initialized Momo config:\n", config=momo_config)
+    log.debug("Successfully initialized Momo config:\n", config=momo_config)
     return momo_config

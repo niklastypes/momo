@@ -30,7 +30,7 @@ def _generate_diary_entry_body(changelog: str, comment: str) -> MomoDiaryEntryBo
     diary_entry_information = f"These are the CHANGELOG updates:\n{changelog}"
     if comment:
         diary_entry_information += f"\n**Special Instructions**: {comment}"
-    log.info("Generating diary entry body using:\n", context=diary_entry_information)
+    log.debug("Generating diary entry body using:\n", context=diary_entry_information)
 
     diary_entry_body = MomoDiaryEntryBody(
         momo_diary_body_agent.run_sync(diary_entry_information).output
@@ -45,7 +45,7 @@ def _generate_diary_entry_title(diary_entry_body: MomoDiaryEntryBody) -> MomoDia
         user_name="Niklas", mode=enums.MomoMode.DIARY_TITLE
     )
     momo_diary_title_agent = agent.build_momo_agent_from_config(momo_diary_title_config)
-    log.info("Generating diary entry title using:\n", body=diary_entry_body)
+    log.debug("Generating diary entry title using:\n", body=diary_entry_body)
 
     diary_entry_title = MomoDiaryEntryTitle(
         momo_diary_title_agent.run_sync(diary_entry_body).output
