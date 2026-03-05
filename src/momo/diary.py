@@ -54,9 +54,20 @@ def _generate_diary_entry_title(diary_entry_body: MomoDiaryEntryBody) -> MomoDia
     return diary_entry_title
 
 
+def _optionally_remove_special_characters_from_title(
+    title: MomoDiaryEntryTitle,
+) -> MomoDiaryEntryTitle:
+    chars_to_remove = ['*', '"']
+    cleaned_title = title
+    for char in chars_to_remove:
+        cleaned_title = cleaned_title.replace(char, "")
+    return MomoDiaryEntryTitle(cleaned_title)
+
+
 def generate_diary_entry(comment: str) -> MomoDiaryEntry:
     changelog = _read_file_contents_from_path(constants.CHANGELOG_PATH)
     diary_entry_body = _generate_diary_entry_body(changelog, comment)
     diary_entry_title = _generate_diary_entry_title(diary_entry_body)
+    clean_diary_entry_title = _optionally_remove_special_characters_from_title(diary_entry_title)
 
-    return MomoDiaryEntry(title=diary_entry_title, body=diary_entry_body)
+    return MomoDiaryEntry(title=clean_diary_entry_title, body=diary_entry_body)
