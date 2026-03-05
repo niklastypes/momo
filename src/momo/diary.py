@@ -4,7 +4,7 @@ import typing as t
 import pydantic
 import structlog
 
-from momo import agent, config, constants, enums
+from momo import agent, config, constants, enums, utils
 
 log = structlog.get_logger()
 
@@ -15,12 +15,6 @@ MomoDiaryEntryBody = t.NewType("MomoDiaryEntryBody", str)
 class MomoDiaryEntry(pydantic.BaseModel):
     title: MomoDiaryEntryTitle
     body: MomoDiaryEntryBody
-
-
-# this currently reads the whole CHANGELOG.md
-def _read_file_contents_from_path(path: str) -> str:
-    with open(path) as f:
-        return f.read()
 
 
 def _generate_diary_entry_body(changelog: str, comment: str) -> MomoDiaryEntryBody:
@@ -62,18 +56,14 @@ def _optionally_remove_special_characters_from_title(
 
 
 def generate_diary_entry(comment: str) -> MomoDiaryEntry:
-    changelog = _read_file_contents_from_path(constants.CHANGELOG_PATH)
+    changelog = utils.read_file(
+        pathlib.Path(constants.CHANGELOG_PATH)
+    )  # this currently reads the whole CHANGELOG.md
     diary_entry_body = _generate_diary_entry_body(changelog, comment)
     diary_entry_title = _generate_diary_entry_title(diary_entry_body)
     clean_diary_entry_title = _optionally_remove_special_characters_from_title(diary_entry_title)
 
     return MomoDiaryEntry(title=clean_diary_entry_title, body=diary_entry_body)
-
-
-def _write_file(path: pathlib.Path, content: t.Any) -> None:
-    with open(path, "w") as f:
-        f.write(content)
-    log.debug("Successfully saved file:\n", file=path)
 
 
 def save_diary_entry_to_disk(file_name: str, diary_entry: MomoDiaryEntry) -> None:
@@ -83,5 +73,5 @@ def save_diary_entry_to_disk(file_name: str, diary_entry: MomoDiaryEntry) -> Non
     diary_entry_body_path = diary_entry_path / f"{file_name}-body.md"
     diary_entry_title_path = diary_entry_path / f"{file_name}-title.txt"
 
-    _write_file(diary_entry_body_path, diary_entry.body)
-    _write_file(diary_entry_title_path, diary_entry.title)
+    utils.write_file(diary_entry_body_path, diary_entry.body)
+    utils.write_file(diary_entry_title_path, diary_entry.title)
