@@ -32,9 +32,18 @@ def diary_entry(
     comment: str = typer.Option(
         "", "--comment", help="Add special instructions on top of system prompt"
     ),
+    file_name: str = typer.Option("local", "--file-name", help="Specify file name for diary entry"),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Output generated diary entry onto terminal instead of text files. For local testing & debugging",
+    ),
 ) -> None:
     diary_entry = diary.generate_diary_entry(comment)
-    print(diary_entry)
+    if dry_run:
+        print(diary_entry)
+    else:
+        diary.save_diary_entry_to_disk(file_name, diary_entry)
 
 
 if __name__ == "__main__":

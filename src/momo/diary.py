@@ -1,3 +1,4 @@
+import pathlib
 import typing as t
 
 import pydantic
@@ -67,3 +68,20 @@ def generate_diary_entry(comment: str) -> MomoDiaryEntry:
     clean_diary_entry_title = _optionally_remove_special_characters_from_title(diary_entry_title)
 
     return MomoDiaryEntry(title=clean_diary_entry_title, body=diary_entry_body)
+
+
+def _write_file(path: pathlib.Path, content: t.Any) -> None:
+    with open(path, "w") as f:
+        f.write(content)
+    log.debug("Successfully saved file:\n", file=path)
+
+
+def save_diary_entry_to_disk(file_name: str, diary_entry: MomoDiaryEntry) -> None:
+    diary_entry_path = pathlib.Path(constants.MOMO_DIARY_PATH) / file_name
+    diary_entry_path.mkdir(parents=True, exist_ok=True)
+
+    diary_entry_body_path = diary_entry_path / f"{file_name}-body.md"
+    diary_entry_title_path = diary_entry_path / f"{file_name}-title.txt"
+
+    _write_file(diary_entry_body_path, diary_entry.body)
+    _write_file(diary_entry_title_path, diary_entry.title)
