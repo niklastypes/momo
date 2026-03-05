@@ -25,5 +25,8 @@ def construct_system_prompt_from_config(system_prompt_config: "config.SystemProm
         agent_name=system_prompt_config.agent_name,
         creator_name=system_prompt_config.creator_name,
         user_name=system_prompt_config.user_name,
+        mode=system_prompt_config.mode,
+        changelog=system_prompt_config.changelog,
+        comment=system_prompt_config.comment,
         **_load_yaml(str(PROMPTS_DIR / "quirks.yaml")),
     )

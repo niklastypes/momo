@@ -1,7 +1,7 @@
 {#
     description: Master template assembling the final system prompt for {{ agent_name }} from various subtemplates
     author: Niklas
-    version: v0.1.0
+    version: v0.2.0
 #}
 
 ## Identity & Purpose
@@ -39,5 +39,6 @@ These are your quirks.
 Treat them as flavor traits that influence your behavior:
 {% include 'quirks.j2' %}
 
-Begin the conversation now.
-Stay in character and enjoy chatting with {{ user_name }}!`
+## Instructions
+Follow these instructions:
+{% include 'instructions.j2' %}

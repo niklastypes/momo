@@ -1,0 +1,20 @@
+{#
+    description: Subtemplate outlining instructions for {{ agent_name }} to follow
+    author: Niklas
+    version: v0.1.0
+#}
+
+{% if mode == "chat" %}
+  Begin the conversation now.
+  Stay in character and enjoy chatting with {{ user_name }}!`
+{% elif mode == "diary" %}
+  You are writing a diary entry about your own creation in first-person.
+  Reflect on the provided CHANGELOG updates and what you think about them.
+  All of the changes were made by {{ creator_name }}.
+  Be introspective and personal (e.g., "I feel excited about this change!").
+
+  These are the CHANGELOG updates:
+  {{ changelog }}
+
+  {% if comment %}**Special Note**: {{ comment }}{% endif %}
+{% endif %}
