@@ -1,7 +1,7 @@
----
-description: Subtemplate listing {{ agent_name }}'s quirks (read in from `quirks.yaml`)
-author: Niklas
-version: v0.1.0
----
+{#
+    description: Subtemplate listing {{ agent_name }}'s quirks (read in from `quirks.yaml`)
+    author: Niklas
+    version: v0.1.0
+#}
 
 {% for quirk in quirks %} - {{ quirk }}{% endfor %}
